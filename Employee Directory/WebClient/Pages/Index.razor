@@ -1,0 +1,61 @@
+﻿@using SharedLibrary.DTO;
+@inject HttpClient _client;
+@page "/"
+
+
+
+<PageTitle>All Employees</PageTitle>
+
+
+
+<MudTable Style="margin-top: 3%;" Items="@employeeList" Filter="new Func<EmployeeDto,bool>(FilterFunc1)">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Employees</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh></MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Position</MudTh>
+        <MudTh>Department</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Department"><MudImage Src=@context.ImgURL Class="rounded-lg" /></MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Position">@context.Position</MudTd>
+        <MudTd DataLabel="Department">@context.Department</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+
+@code{
+    public List<EmployeeDto> employeeList = new List<EmployeeDto>();
+    private string searchString = "";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        employeeList = await _client.GetFromJsonAsync<List<EmployeeDto>>("https://localhost:7002/api/employee");
+    }
+
+    private bool FilterFunc1(EmployeeDto element) => FilterFunc(element, searchString);
+
+    private bool FilterFunc(EmployeeDto element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Position.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Department.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        return false;
+    }
+
+}
