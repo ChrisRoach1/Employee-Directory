@@ -8,8 +8,8 @@ This small project was a challenge set forth by a youtuber - video found [here](
 - Store the data in a database
 
 #### Additional requirements set by me
-- Build a mobile app component - WORK IN PROGRESS
-- Add ability to add employee across all apps
+- Build a mobile app component 
+- Add ability to add employee across all apps (work in progess)
 
 # Tech Used
 
@@ -17,4 +17,26 @@ This small project was a challenge set forth by a youtuber - video found [here](
 - Blazor Server
 - WinForms
 - PlanetScale
+- Ngrok
+- React Native
 
+# Setup Ngrok
+
+Ngrok was used to expose my local API to the internet to then call the endpoint from
+the mobile app for development.
+
+- Sign up for an account and download ngrok [here](https://ngrok.com/)
+- Alternatively, if on macOS, download through brew
+```
+brew install --cask ngrok
+```
+
+- go through the setup steps given on the ngrok dashboard
+
+- run the following command once setup
+
+```
+ngrok http [URL FOR LOCAL API]
+```
+
+- this will generate a url you can access your local endpoint at

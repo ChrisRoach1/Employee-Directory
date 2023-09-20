@@ -4,6 +4,7 @@ using AutoMapper;
 using EmployeeAPI.Mapper;
 using Newtonsoft.Json;
 
+var policyName = "_myAllowAnyOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddNewtonsoftJson(x =>
@@ -12,6 +13,18 @@ builder.Services.AddControllers().AddNewtonsoftJson(x =>
     x.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 });
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: policyName,
+                      builder =>
+                      {
+                          builder
+                            .AllowAnyOrigin()
+                            .WithMethods("GET")
+                            .AllowAnyHeader();
+                      });
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -45,5 +58,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors(policyName);
 
 app.Run();
